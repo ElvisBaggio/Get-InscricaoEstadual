@@ -81,7 +81,7 @@ class SeleniumService:
             )
             
             # Wait after dropdown change
-            time.sleep(1)  # Allow for any dynamic updates
+            time.sleep(0.2)  # Allow for any dynamic updates
             
             # Enter CNPJ
             selenium_logger.debug("Entering CNPJ")
@@ -90,7 +90,7 @@ class SeleniumService:
                     (By.ID, settings.CNPJ_INPUT_ID)))
                 cnpj_input.clear()
                 cnpj_input.send_keys(cnpj)
-                time.sleep(0.5)  # Brief pause for stability
+                time.sleep(0.2)  # Brief pause for stability
                 selenium_logger.debug(f"CNPJ entered: {cnpj}")
             except TimeoutException:
                 selenium_logger.error(f"CNPJ input field not found for CNPJ {cnpj}", exc_info=True)
@@ -113,7 +113,7 @@ class SeleniumService:
                     
                     # Get initial src to check for changes
                     initial_src = captcha_img.get_attribute("src")
-                    time.sleep(1)  # Wait to ensure CAPTCHA is stable
+                    time.sleep(0.2)  # Wait to ensure CAPTCHA is stable
                     
                     # Verify CAPTCHA hasn't changed
                     current_src = captcha_img.get_attribute("src")
@@ -135,7 +135,7 @@ class SeleniumService:
                     except TimeoutException:
                         selenium_logger.error("CAPTCHA input field not found during retry.", exc_info=True)
                         raise Exception("CAPTCHA input field not found during retry.")
-                    time.sleep(2)  # Longer pause for stability
+                    time.sleep(0.2)  # Longer pause for stability
                     break  # Successfully processed CAPTCHA, exit loop
                 except TimeoutException:
                     selenium_logger.error("CAPTCHA image not found during retry.", exc_info=True)
@@ -163,40 +163,40 @@ class SeleniumService:
                     # Use JavaScript to click to avoid potential overlay issues
                     self.driver.execute_script("arguments[0].click();", search_button)
                     
-                    # Check for error message
+                    # Create a short timeout wait for error checks
+                    quick_wait = WebDriverWait(self.driver, 5)
+                    
                     try:
-                        error_msg = self.wait.until(EC.presence_of_element_located(
-                            (By.ID, settings.ERROR_MSG_ID)))
-                        if error_msg.is_displayed() and error_msg.text.strip():
-                            if "imagem de segurança" in error_msg.text:
-                                if attempt < max_retries - 1:
+                        # Try to find any of the possible elements
+                        result = quick_wait.until(lambda driver: (
+                            driver.find_element(By.XPATH, settings.RESULT_TABLE_XPATH) or
+                            driver.find_element(By.ID, settings.ERROR_MSG_ID) or
+                            driver.find_element(By.ID, settings.NOT_FOUND_MSG_ID)
+                        ))
+                        
+                        # Check which element we found
+                        if result.get_attribute('id') == settings.ERROR_MSG_ID:
+                            error_msg = result
+                            if error_msg.is_displayed() and error_msg.text.strip():
+                                if "imagem de segurança" in error_msg.text and attempt < max_retries - 1:
                                     selenium_logger.warning(f"Captcha validation failed, retrying... ({attempt + 1}/{max_retries})")
-                                    # Get new captcha
                                     try:
-                                        captcha_img = self.wait.until(EC.presence_of_element_located(
+                                        captcha_img = quick_wait.until(EC.presence_of_element_located(
                                             (By.ID, settings.CAPTCHA_IMG_ID)))
                                         captcha_text = CaptchaService.process_captcha(captcha_img)
-                                        try:
-                                            captcha_input = self.wait.until(EC.element_to_be_clickable(
-                                                (By.ID, settings.CAPTCHA_INPUT_ID)))
-                                            captcha_input.clear()
-                                            captcha_input.send_keys(captcha_text)
-                                            selenium_logger.debug("Entered new CAPTCHA text for retry.")
-                                        except TimeoutException:
-                                            selenium_logger.error("CAPTCHA input field not found during retry.", exc_info=True)
-                                            raise Exception("CAPTCHA input field not found during retry.")
-                                    except TimeoutException:
-                                        selenium_logger.error("CAPTCHA image not found during retry.", exc_info=True)
-                                        raise Exception("CAPTCHA image not found during retry.")
-                                    time.sleep(retry_delay)  # Wait before retry
-                                    retry_delay *= 2  # Exponential backoff
-                                    continue
-                            raise Exception(f"Form validation error: {error_msg.text}")
-                    except TimeoutException:
-                        # Check for "CNPJ not found" message before continuing
-                        try:
-                            not_found_msg = self.wait.until(EC.presence_of_element_located(
-                                (By.ID, settings.NOT_FOUND_MSG_ID)))
+                                        captcha_input = quick_wait.until(EC.element_to_be_clickable(
+                                            (By.ID, settings.CAPTCHA_INPUT_ID)))
+                                        captcha_input.clear()
+                                        captcha_input.send_keys(captcha_text)
+                                        selenium_logger.debug("Entered new CAPTCHA text for retry.")
+                                        time.sleep(0.2)  # Brief wait before retry
+                                        continue
+                                    except TimeoutException as e:
+                                        selenium_logger.error("CAPTCHA interaction failed during retry.", exc_info=True)
+                                        raise Exception("CAPTCHA interaction failed during retry.") from e
+                                raise Exception(f"Form validation error: {error_msg.text}")
+                        elif result.get_attribute('id') == settings.NOT_FOUND_MSG_ID:
+                            not_found_msg = result
                             if not_found_msg.is_displayed() and not_found_msg.text.strip():
                                 selenium_logger.info(f"CNPJ {cnpj} not found in database")
                                 return {
@@ -206,17 +206,21 @@ class SeleniumService:
                                     "elapsed_time": f"{time.time() - start_time:.2f}s",
                                     "not_found": True
                                 }
-                        except TimeoutException:
-                            # No "not found" message, continue with result processing
-                            selenium_logger.debug("No error or not-found message found after form submission.")
-                            break
+                        # If we found the result table or no special messages, continue processing
+                        selenium_logger.debug("Form submitted successfully, proceeding to process results.")
+                        break
+                    except TimeoutException:
+                        if attempt == max_retries - 1:
+                            raise Exception("No response received after form submission")
+                        selenium_logger.warning("No response after form submission, retrying...")
+                        time.sleep(0.2)
+                        continue
                 except Exception as e:
                     if attempt == max_retries - 1:
                         selenium_logger.error(f"Form submission failed after {max_retries} attempts: {str(e)}", exc_info=True)
                         raise Exception(f"Form submission failed after {max_retries} attempts: {str(e)}")
                     selenium_logger.warning(f"Form submission attempt {attempt + 1} failed: {str(e)}. Retrying...")
-                    time.sleep(retry_delay)
-                    retry_delay *= 2
+                    time.sleep(0.2)
                     continue
 
             # Wait for and validate result page
@@ -230,14 +234,14 @@ class SeleniumService:
                             (By.XPATH, settings.RESULT_TABLE_XPATH)))
                         
                         # Wait additional time for data to load
-                        time.sleep(1)
+                        time.sleep(0.2)
                         
                         # Verify all sections are present
                         sections = self.driver.find_elements(By.XPATH, settings.RESULT_SECTIONS_XPATH)
                         if len(sections) < 3:  # Should have at least Estabelecimento, Endereço, and Informações Complementares
                             if retry < 2:
                                 selenium_logger.warning("Result sections not fully loaded, retrying...")
-                                time.sleep(2)  # Wait longer for next attempt
+                                time.sleep(0.2)  # Wait longer for next attempt
                                 continue
                             raise Exception("Result page sections not fully loaded")
                         
@@ -245,7 +249,7 @@ class SeleniumService:
                         if not result_table.text.strip():
                             if retry < 2:
                                 selenium_logger.warning("Result table is empty, retrying...")
-                                time.sleep(2)
+                                time.sleep(0.2)
                                 continue
                             raise Exception("Result table is empty")
                             
@@ -255,7 +259,7 @@ class SeleniumService:
                         if retry == 2:
                             raise
                         selenium_logger.warning(f"Timeout waiting for result table (attempt {retry + 1}/3)")
-                        time.sleep(2)
+                        time.sleep(0.2)
                 
                 # Extract IE number
                 ie_number = self._get_field_value('IE:')

@@ -151,7 +151,7 @@ def calibrate_captcha():
                 print(f"Saved debug image to {debug_path}")
             
             # Wait a bit before getting next captcha
-            time.sleep(2)
+            time.sleep(0.2)
             
             # Refresh page to get new captcha
             driver.refresh()
