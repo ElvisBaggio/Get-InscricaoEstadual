@@ -29,10 +29,11 @@ class Settings:
     SELENIUM_FORM_RETRY_DELAY: float = float(os.getenv('SELENIUM_FORM_RETRY_DELAY', '0.1'))
 
     # Retry Attempts
-    SELENIUM_MAX_CAPTCHA_ATTEMPTS: int = int(os.getenv('SELENIUM_MAX_CAPTCHA_ATTEMPTS', '3'))
-    SELENIUM_MAX_FORM_RETRIES: int = int(os.getenv('SELENIUM_MAX_FORM_RETRIES', '2'))
-    SELENIUM_RESULT_RETRIES: int = int(os.getenv('SELENIUM_RESULT_RETRIES', '2'))
+    SELENIUM_MAX_CAPTCHA_ATTEMPTS: int = int(os.getenv('SELENIUM_MAX_CAPTCHA_ATTEMPTS', '5'))
+    SELENIUM_MAX_FORM_RETRIES: int = int(os.getenv('SELENIUM_MAX_FORM_RETRIES', '5'))
+    SELENIUM_RESULT_RETRIES: int = int(os.getenv('SELENIUM_RESULT_RETRIES', '3'))
     SELENIUM_MIN_RESULT_SECTIONS: int = int(os.getenv('SELENIUM_MIN_RESULT_SECTIONS', '3'))
+    SELENIUM_BASE_RETRY_DELAY: float = float(os.getenv('SELENIUM_BASE_RETRY_DELAY', '2.0'))
 
     # Browser Settings
     SELENIUM_CHROME_HEADLESS: bool = os.getenv('SELENIUM_CHROME_HEADLESS', 'true').lower() == 'true'

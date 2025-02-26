@@ -98,12 +98,14 @@ class SeleniumService:
                     "elapsed_time": f"{time.time() - start_time:.2f}s"
                 }
 
-            # Process CAPTCHA with stability check and retries
+            # Process CAPTCHA with stability check and exponential backoff retries
             max_captcha_attempts = settings.SELENIUM_MAX_CAPTCHA_ATTEMPTS
-            retry_delay = settings.SELENIUM_RETRY_DELAY
+            base_delay = settings.SELENIUM_BASE_RETRY_DELAY
 
             for captcha_attempt in range(max_captcha_attempts):
-                selenium_logger.debug(f"Processing CAPTCHA (attempt {captcha_attempt + 1}/{max_captcha_attempts})")
+                # Calculate exponential backoff delay for CAPTCHA
+                captcha_retry_delay = base_delay * (2 ** captcha_attempt)
+                selenium_logger.debug(f"Processing CAPTCHA (attempt {captcha_attempt + 1}/{max_captcha_attempts}) with delay {captcha_retry_delay:.2f}s")
                 try:
                     captcha_img = self.wait.until(EC.presence_of_element_located(
                         (By.ID, settings.CAPTCHA_IMG_ID)))
@@ -115,7 +117,8 @@ class SeleniumService:
                     # Verify CAPTCHA hasn't changed
                     current_src = captcha_img.get_attribute("src")
                     if initial_src != current_src:
-                        selenium_logger.warning("CAPTCHA changed while processing, retrying...")
+                        selenium_logger.warning(f"CAPTCHA changed while processing, retrying in {captcha_retry_delay:.2f}s...")
+                        time.sleep(captcha_retry_delay)
                         continue
                         
                     captcha_text = CaptchaService.process_captcha(captcha_img)
@@ -130,12 +133,20 @@ class SeleniumService:
                         captcha_input.send_keys(captcha_text)
                         selenium_logger.debug("Entered new CAPTCHA text for retry.")
                     except TimeoutException:
-                        selenium_logger.error("CAPTCHA input field not found during retry.", exc_info=True)
-                        raise Exception("CAPTCHA input field not found during retry.")
+                        if captcha_attempt < max_captcha_attempts - 1:
+                            selenium_logger.warning(f"CAPTCHA input field not found, retrying in {captcha_retry_delay:.2f}s...")
+                            time.sleep(captcha_retry_delay)
+                            continue
+                        selenium_logger.error("CAPTCHA input field not found after all retries.", exc_info=True)
+                        raise Exception("CAPTCHA input field not found after all retries.")
                     break  # Successfully processed CAPTCHA, exit loop
                 except TimeoutException:
-                    selenium_logger.error("CAPTCHA image not found during retry.", exc_info=True)
-                    raise Exception("CAPTCHA image not found during retry.")
+                    if captcha_attempt < max_captcha_attempts - 1:
+                        selenium_logger.warning(f"CAPTCHA image not found, retrying in {captcha_retry_delay:.2f}s...")
+                        time.sleep(captcha_retry_delay)
+                        continue
+                    selenium_logger.error("CAPTCHA image not found after all retries.", exc_info=True)
+                    raise Exception("CAPTCHA image not found after all retries.")
             else:
                 selenium_logger.error("Failed to process stable CAPTCHA after maximum attempts.")
                 return {
@@ -145,11 +156,14 @@ class SeleniumService:
                     "elapsed_time": f"{time.time() - start_time:.2f}s"
                 }
 
-            # Try form submission with retries
+            # Try form submission with exponential backoff retries
             max_retries = settings.SELENIUM_MAX_FORM_RETRIES
-            retry_delay = settings.SELENIUM_FORM_RETRY_DELAY
+            base_delay = settings.SELENIUM_BASE_RETRY_DELAY
 
             for attempt in range(max_retries):
+                # Calculate exponential backoff delay
+                retry_delay = base_delay * (2 ** attempt)
+                selenium_logger.debug(f"Attempt {attempt + 1}/{max_retries} with delay {retry_delay:.2f}s")
                 try:
                     # Submit form
                     selenium_logger.debug(f"Submitting form (attempt {attempt + 1}/{max_retries})")
@@ -208,23 +222,27 @@ class SeleniumService:
                     except TimeoutException:
                         if attempt == max_retries - 1:
                             raise Exception("No response received after form submission")
-                        selenium_logger.warning("No response after form submission, retrying...")
-                        time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
+                        selenium_logger.warning(f"No response after form submission, retrying in {retry_delay:.2f}s...")
+                        time.sleep(retry_delay)
                         continue
                 except Exception as e:
                     if attempt == max_retries - 1:
                         selenium_logger.error(f"Form submission failed after {max_retries} attempts: {str(e)}", exc_info=True)
                         raise Exception(f"Form submission failed after {max_retries} attempts: {str(e)}")
-                    selenium_logger.warning(f"Form submission attempt {attempt + 1} failed: {str(e)}. Retrying...")
-                    time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
+                    selenium_logger.warning(f"Form submission attempt {attempt + 1} failed: {str(e)}. Retrying in {retry_delay:.2f}s...")
+                    time.sleep(retry_delay)
                     continue
 
             # Wait for and validate result page
             try:
                 selenium_logger.debug("Waiting for result table and data")
-                # Wait for main result table with retry
+                # Wait for main result table with exponential backoff retry
                 for retry in range(settings.SELENIUM_RESULT_RETRIES):
+                    # Calculate exponential backoff delay for results
+                    result_retry_delay = settings.SELENIUM_BASE_RETRY_DELAY * (2 ** retry)
                     try:
+                        selenium_logger.debug(f"Result table attempt {retry + 1}/{settings.SELENIUM_RESULT_RETRIES} with delay {result_retry_delay:.2f}s")
+                        
                         # Wait for main result table
                         result_table = self.wait.until(EC.presence_of_element_located(
                             (By.XPATH, settings.RESULT_TABLE_XPATH)))
@@ -233,16 +251,16 @@ class SeleniumService:
                         sections = self.driver.find_elements(By.XPATH, settings.RESULT_SECTIONS_XPATH)
                         if len(sections) < settings.SELENIUM_MIN_RESULT_SECTIONS:
                             if retry < settings.SELENIUM_RESULT_RETRIES - 1:
-                                selenium_logger.warning("Result sections not fully loaded, retrying...")
-                                time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
+                                selenium_logger.warning(f"Result sections not fully loaded, retrying in {result_retry_delay:.2f}s...")
+                                time.sleep(result_retry_delay)
                                 continue
                             raise Exception("Result page sections not fully loaded")
                         
                         # Verify table has content
                         if not result_table.text.strip():
                             if retry < settings.SELENIUM_RESULT_RETRIES - 1:
-                                selenium_logger.warning("Result table is empty, retrying...")
-                                time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
+                                selenium_logger.warning(f"Result table is empty, retrying in {result_retry_delay:.2f}s...")
+                                time.sleep(result_retry_delay)
                                 continue
                             raise Exception("Result table is empty")
                             
@@ -251,8 +269,8 @@ class SeleniumService:
                     except TimeoutException as e:
                         if retry == settings.SELENIUM_RESULT_RETRIES - 1:
                             raise
-                        selenium_logger.warning(f"Timeout waiting for result table (attempt {retry + 1}/{settings.SELENIUM_RESULT_RETRIES})")
-                        time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
+                        selenium_logger.warning(f"Timeout waiting for result table (attempt {retry + 1}/{settings.SELENIUM_RESULT_RETRIES}), retrying in {result_retry_delay:.2f}s...")
+                        time.sleep(result_retry_delay)
                 
                 # Extract IE number
                 ie_number = self._get_field_value('IE:')
