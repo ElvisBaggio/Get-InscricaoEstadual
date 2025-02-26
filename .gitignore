@@ -1,0 +1,20 @@
+# Logs
+*.log
+logs/
+
+# Captcha attempts
+captcha_attempts/
+
+# Calibration output
+calibration_output/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
