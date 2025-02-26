@@ -1,0 +1,13 @@
+{
+  "timestamp": "20250226_154134",
+  "attempt_number": 1,
+  "ocr_result": "cbze",
+  "settings_used": {
+    "psm_mode": 13,
+    "contrast": 2.0,
+    "threshold": 100,
+    "noise_reduction": true,
+    "resize_enabled": true,
+    "stronger_enhancement": false
+  }
+}

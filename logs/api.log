@@ -1,0 +1,88 @@
+2025-02-26 11:56:51 - api - INFO - Received IE lookup request [1740581811549] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 11:57:13 - api - ERROR - IE lookup failed [1740581811549] - CNPJ: 32530320000140, Error: Timeout waiting for elements or CAPTCHA verification failed, Time: 22.03s
+2025-02-26 11:59:37 - api - INFO - Received IE lookup request [1740581977190] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 11:59:37 - api - ERROR - Unexpected error in IE lookup [1740581977190] - CNPJ: 32530320000140, Error: 'coroutine' object is not subscriptable
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/routes/ie_routes.py", line 66, in get_ie
+    if not result["success"]:
+           ~~~~~~^^^^^^^^^^^
+TypeError: 'coroutine' object is not subscriptable
+2025-02-26 12:48:22 - api - INFO - Received IE lookup request [1740584902642] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 12:48:22 - api - ERROR - Unexpected error in IE lookup [1740584902642] - CNPJ: 32530320000140, Error: 'coroutine' object is not subscriptable
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/routes/ie_routes.py", line 66, in get_ie
+    if not result["success"]:
+           ~~~~~~^^^^^^^^^^^
+TypeError: 'coroutine' object is not subscriptable
+2025-02-26 12:49:56 - api - INFO - Received IE lookup request [1740584996092] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 12:49:56 - api - ERROR - Unexpected error in IE lookup [1740584996092] - CNPJ: 32530320000140, Error: 'State' object has no attribute 'loop'
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/.venv/lib/python3.13/site-packages/starlette/datastructures.py", line 673, in __getattr__
+    return self._state[key]
+           ~~~~~~~~~~~^^^^^
+KeyError: 'loop'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/routes/ie_routes.py", line 65, in get_ie
+    result = await request.app.state.loop.run_in_executor(
+                   ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/.venv/lib/python3.13/site-packages/starlette/datastructures.py", line 676, in __getattr__
+    raise AttributeError(message.format(self.__class__.__name__, key))
+AttributeError: 'State' object has no attribute 'loop'
+2025-02-26 12:50:27 - api - INFO - Received IE lookup request [1740585027530] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 12:50:49 - api - ERROR - IE lookup failed [1740585027530] - CNPJ: 32530320000140, Error: Unexpected error: cannot access local variable 'cnpj_input' where it is not associated with a value, Time: 22.44s
+2025-02-26 13:03:43 - api - INFO - Received IE lookup request [1740585823285] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 13:03:50 - api - ERROR - IE lookup failed [1740585823285] - CNPJ: 32530320000140, Error: Unexpected error: Form validation error: O texto digitado não confere com a imagem de segurança., Time: 7.05s
+2025-02-26 13:48:17 - api - INFO - Received IE lookup request [1740588497978] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 13:48:22 - api - ERROR - IE lookup failed [1740588497978] - CNPJ: 32530320000140, Error: Unexpected error: Form validation error: O texto digitado não confere com a imagem de segurança., Time: 4.35s
+2025-02-26 13:53:49 - api - INFO - Received IE lookup request [1740588829208] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 13:53:55 - api - ERROR - IE lookup failed [1740588829208] - CNPJ: 32530320000140, Error: Unexpected error: Failed to process CAPTCHA after multiple attempts, Time: 5.81s
+2025-02-26 14:12:02 - api - INFO - Received IE lookup request [1740589922076] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 14:12:05 - api - ERROR - IE lookup failed [1740589922076] - CNPJ: 32530320000140, Error: Unexpected error: Failed to process CAPTCHA after multiple attempts, Time: 3.76s
+2025-02-26 14:13:48 - api - INFO - Received IE lookup request [1740590028380] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 14:13:52 - api - ERROR - IE lookup failed [1740590028380] - CNPJ: 32530320000140, Error: Unexpected error: Failed to process CAPTCHA after multiple attempts, Time: 3.72s
+2025-02-26 14:18:49 - api - INFO - Received IE lookup request [1740590329273] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 14:18:52 - api - ERROR - IE lookup failed [1740590329273] - CNPJ: 32530320000140, Error: Unexpected error: Failed to process CAPTCHA after multiple attempts, Time: 3.65s
+2025-02-26 14:23:52 - api - INFO - Received IE lookup request [1740590632342] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 14:24:03 - api - ERROR - IE lookup failed [1740590632342] - CNPJ: 32530320000140, Error: Unexpected error: Form validation error: O texto digitado não confere com a imagem de segurança., Time: 10.69s
+2025-02-26 15:41:29 - api - INFO - Received IE lookup request [1740595289945] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 15:41:59 - api - ERROR - IE lookup failed [1740595289945] - CNPJ: 32530320000140, Error: WebDriver error: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//td[contains(@class, 'dadoDetalhe') and preceding-sibling::td[contains(text(), 'Atividades Econômicas:')]]"}
+  (Session info: chrome=133.0.6943.128); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+0   chromedriver                        0x00000001010a42d4 cxxbridge1$str$ptr + 2739836
+1   chromedriver                        0x000000010109c934 cxxbridge1$str$ptr + 2708700
+2   chromedriver                        0x0000000100bfdf90 cxxbridge1$string$len + 93360
+3   chromedriver                        0x0000000100c44de4 cxxbridge1$string$len + 383748
+4   chromedriver                        0x0000000100c85e80 cxxbridge1$string$len + 650144
+5   chromedriver                        0x0000000100c39060 cxxbridge1$string$len + 335232
+6   chromedriver                        0x000000010106cc38 cxxbridge1$str$ptr + 2512864
+7   chromedriver                        0x000000010106ff58 cxxbridge1$str$ptr + 2525952
+8   chromedriver                        0x0000000101052578 cxxbridge1$str$ptr + 2404640
+9   chromedriver                        0x0000000101070818 cxxbridge1$str$ptr + 2528192
+10  chromedriver                        0x0000000101042f2c cxxbridge1$str$ptr + 2341588
+11  chromedriver                        0x000000010108ca60 cxxbridge1$str$ptr + 2643464
+12  chromedriver                        0x000000010108cbe8 cxxbridge1$str$ptr + 2643856
+13  chromedriver                        0x000000010109c5a8 cxxbridge1$str$ptr + 2707792
+14  libsystem_pthread.dylib             0x0000000180e282e4 _pthread_start + 136
+15  libsystem_pthread.dylib             0x0000000180e230fc thread_start + 8
+, Time: 29.67s
+2025-02-26 15:47:29 - api - INFO - Received IE lookup request [1740595649886] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 15:47:57 - api - INFO - IE lookup successful [1740595649886] - CNPJ: 32530320000140, IE: None, Time: 27.23s
+2025-02-26 15:47:57 - api - ERROR - Unexpected error in IE lookup [1740595649886] - CNPJ: 32530320000140, Error: 'error'
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/routes/ie_routes.py", line 92, in get_ie
+    f"Error: {result['error']}, Time: {elapsed_time:.2f}s"
+              ~~~~~~^^^^^^^^^
+KeyError: 'error'
+2025-02-26 15:49:22 - api - INFO - Received IE lookup request [1740595762894] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 15:49:50 - api - INFO - IE lookup successful [1740595762894] - CNPJ: 32530320000140, IE: None, Time: 27.18s
+2025-02-26 15:49:50 - api - ERROR - IE lookup failed [1740595762894] - CNPJ: 32530320000140, Error: Unknown error, Time: 27.18s
+2025-02-26 16:20:05 - api - INFO - Received IE lookup request [1740597605083] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 16:20:45 - api - INFO - IE lookup successful [1740597605083] - CNPJ: 32530320000140, IE: None, Time: 40.46s
+2025-02-26 16:20:45 - api - ERROR - IE lookup failed [1740597605083] - CNPJ: 32530320000140, Error: Unknown error, Time: 40.46s
+2025-02-26 16:29:42 - api - INFO - Received IE lookup request [1740598182749] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 16:30:19 - api - ERROR - IE lookup failed [1740598182749] - CNPJ: 32530320000140, Error: IE number not found in result page. The webpage structure might have changed., Time: 37.08s
+2025-02-26 16:39:04 - api - INFO - Received IE lookup request [1740598744547] - CNPJ: 32530320000140, IP: 127.0.0.1
+2025-02-26 16:40:12 - api - INFO - IE lookup successful [1740598744547] - CNPJ: 32530320000140, IE: 123.502.388.114, Time: 68.07s

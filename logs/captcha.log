@@ -1,0 +1,240 @@
+2025-02-26 13:03:46 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 13:03:46 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 13:03:46 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 13:03:46 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 13:03:47 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 13:03:47 - captcha_service - DEBUG - Starting OCR with config: --psm 8 --oem 3
+2025-02-26 13:03:49 - captcha_service - INFO - CAPTCHA processing completed. Text length: 5
+2025-02-26 13:48:21 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 13:48:21 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 13:48:21 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 13:48:21 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 13:48:21 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 13:48:21 - captcha_service - DEBUG - Starting OCR with config: --psm 8 --oem 3
+2025-02-26 13:48:21 - captcha_service - INFO - CAPTCHA processing completed. Text length: 4
+2025-02-26 13:53:52 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 13:53:52 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 13:53:52 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 13:53:52 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 13:53:52 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 13:53:52 - captcha_service - DEBUG - Attempting OCR with PSM mode 7
+2025-02-26 13:53:52 - captcha_service - DEBUG - Attempting OCR with PSM mode 8
+2025-02-26 13:53:52 - captcha_service - DEBUG - Attempting OCR with PSM mode 6
+2025-02-26 13:53:52 - captcha_service - DEBUG - Attempting OCR with PSM mode 13
+2025-02-26 13:53:53 - captcha_service - INFO - Multiple results found, using most common: ibepB
+2025-02-26 13:53:53 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 13:53:53 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 13:53:53 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 13:53:53 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 13:53:53 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 13:53:53 - captcha_service - DEBUG - Attempting OCR with PSM mode 7
+2025-02-26 13:53:53 - captcha_service - DEBUG - Attempting OCR with PSM mode 8
+2025-02-26 13:53:53 - captcha_service - DEBUG - Attempting OCR with PSM mode 6
+2025-02-26 13:53:53 - captcha_service - DEBUG - Attempting OCR with PSM mode 13
+2025-02-26 13:53:54 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 13:53:54 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 13:53:54 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 13:53:54 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 13:53:54 - captcha_service - DEBUG - Attempting OCR with PSM mode 7
+2025-02-26 13:53:54 - captcha_service - DEBUG - Attempting OCR with PSM mode 8
+2025-02-26 13:53:54 - captcha_service - DEBUG - Attempting OCR with PSM mode 6
+2025-02-26 13:53:54 - captcha_service - DEBUG - Attempting OCR with PSM mode 13
+2025-02-26 13:53:54 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 13:53:54 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 13:53:54 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 13:53:54 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 13:53:54 - captcha_service - DEBUG - Attempting OCR with PSM mode 7
+2025-02-26 13:53:54 - captcha_service - DEBUG - Attempting OCR with PSM mode 8
+2025-02-26 13:53:54 - captcha_service - DEBUG - Attempting OCR with PSM mode 6
+2025-02-26 13:53:54 - captcha_service - DEBUG - Attempting OCR with PSM mode 13
+2025-02-26 13:53:54 - captcha_service - ERROR - Error processing CAPTCHA: Failed to process CAPTCHA after multiple attempts
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/services/captcha_service.py", line 80, in process_captcha
+    raise Exception("Failed to process CAPTCHA after multiple attempts")
+Exception: Failed to process CAPTCHA after multiple attempts
+2025-02-26 14:05:47 - captcha_service - DEBUG - Processing base64 image data
+2025-02-26 14:05:47 - captcha_service - ERROR - Error processing base64 image: not enough values to unpack (expected 2, got 1)
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/services/captcha_service.py", line 121, in _process_base64_image
+    header, encoded = captcha_src.split(",", 1)
+    ^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 2, got 1)
+2025-02-26 14:07:21 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:07:21 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:07:24 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:07:24 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:07:28 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:07:28 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:07:31 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:07:31 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:07:35 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:07:35 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:12:05 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 14:12:05 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:12:05 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:12:05 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:12:05 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:12:05 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:12:05 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:12:05 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:12:05 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:12:05 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:12:05 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:12:05 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:12:05 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:12:05 - captcha_service - ERROR - Error processing CAPTCHA: Failed to process CAPTCHA after multiple attempts
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/services/captcha_service.py", line 70, in process_captcha
+    raise Exception("Failed to process CAPTCHA after multiple attempts")
+Exception: Failed to process CAPTCHA after multiple attempts
+2025-02-26 14:13:51 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 14:13:51 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:13:51 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:13:51 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:13:51 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:13:51 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:13:51 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:13:51 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:13:51 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:13:51 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:13:51 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:13:51 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:13:51 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:13:52 - captcha_service - ERROR - Error processing CAPTCHA: Failed to process CAPTCHA after multiple attempts
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/services/captcha_service.py", line 70, in process_captcha
+    raise Exception("Failed to process CAPTCHA after multiple attempts")
+Exception: Failed to process CAPTCHA after multiple attempts
+2025-02-26 14:18:52 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 14:18:52 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:18:52 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:18:52 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:18:52 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:18:52 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_141852_attempt_1
+2025-02-26 14:18:52 - captcha_service - INFO - Attempt 1 result: 4cfs
+2025-02-26 14:18:52 - captcha_service - INFO - Stronger attempt 1 saved to: captcha_attempts/20250226_141852_attempt_4
+2025-02-26 14:18:52 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:18:52 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:18:52 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:18:52 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:18:52 - captcha_service - INFO - Attempt 2 saved to: captcha_attempts/20250226_141852_attempt_2
+2025-02-26 14:18:52 - captcha_service - INFO - Attempt 2 result: 4cfs
+2025-02-26 14:18:52 - captcha_service - INFO - Stronger attempt 2 saved to: captcha_attempts/20250226_141852_attempt_5
+2025-02-26 14:18:52 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:18:52 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:18:52 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:18:52 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:18:52 - captcha_service - INFO - Attempt 3 saved to: captcha_attempts/20250226_141852_attempt_3
+2025-02-26 14:18:52 - captcha_service - INFO - Attempt 3 result: 4cfs
+2025-02-26 14:18:52 - captcha_service - INFO - Stronger attempt 3 saved to: captcha_attempts/20250226_141852_attempt_6
+2025-02-26 14:18:52 - captcha_service - ERROR - Error processing CAPTCHA: Failed to process CAPTCHA after multiple attempts
+Traceback (most recent call last):
+  File "/Users/elvisoliveira/Dev-local/ObtemIE/services/captcha_service.py", line 136, in process_captcha
+    raise Exception("Failed to process CAPTCHA after multiple attempts")
+Exception: Failed to process CAPTCHA after multiple attempts
+2025-02-26 14:23:55 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 14:23:55 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:23:55 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:23:55 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:23:55 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:23:55 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_142355_attempt_1
+2025-02-26 14:23:55 - captcha_service - INFO - Attempt 1 result: 128q
+2025-02-26 14:23:55 - captcha_service - INFO - Successfully recognized CAPTCHA: 128q
+2025-02-26 14:23:56 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 14:23:56 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:23:56 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:23:56 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:23:56 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:23:56 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_142356_attempt_1
+2025-02-26 14:23:56 - captcha_service - INFO - Attempt 1 result: Toxy
+2025-02-26 14:23:56 - captcha_service - INFO - Successfully recognized CAPTCHA: Toxy
+2025-02-26 14:23:58 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 14:23:58 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 14:23:58 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 14:23:58 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 14:23:58 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 14:23:58 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_142358_attempt_1
+2025-02-26 14:23:58 - captcha_service - INFO - Attempt 1 result: 39x
+2025-02-26 14:23:58 - captcha_service - INFO - Stronger attempt 1 saved to: captcha_attempts/20250226_142358_attempt_4
+2025-02-26 14:23:58 - captcha_service - INFO - Successfully recognized CAPTCHA with stronger enhancement: 39nc
+2025-02-26 15:41:34 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 15:41:34 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 15:41:34 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 15:41:34 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 15:41:34 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 15:41:34 - captcha_service - DEBUG - Valid result found with PSM mode 7: cbze
+2025-02-26 15:41:34 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_154134_attempt_1
+2025-02-26 15:41:34 - captcha_service - INFO - Attempt 1 result: cbze
+2025-02-26 15:41:34 - captcha_service - INFO - Successfully recognized CAPTCHA: cbze
+2025-02-26 15:41:36 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 15:41:36 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 15:41:36 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 15:41:36 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 15:41:36 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 15:41:36 - captcha_service - DEBUG - Valid result found with PSM mode 7: i3jq
+2025-02-26 15:41:36 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_154136_attempt_1
+2025-02-26 15:41:36 - captcha_service - INFO - Attempt 1 result: i3jq
+2025-02-26 15:41:36 - captcha_service - INFO - Successfully recognized CAPTCHA: i3jq
+2025-02-26 15:47:34 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 15:47:34 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 15:47:34 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 15:47:34 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 15:47:34 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 15:47:34 - captcha_service - DEBUG - Valid result found with PSM mode 7: boji
+2025-02-26 15:47:34 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_154734_attempt_1
+2025-02-26 15:47:34 - captcha_service - INFO - Attempt 1 result: boji
+2025-02-26 15:47:34 - captcha_service - INFO - Successfully recognized CAPTCHA: boji
+2025-02-26 15:49:27 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 15:49:27 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 15:49:27 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 15:49:27 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 15:49:27 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 15:49:27 - captcha_service - DEBUG - Valid result found with PSM mode 8: k6nl
+2025-02-26 15:49:27 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_154927_attempt_1
+2025-02-26 15:49:27 - captcha_service - INFO - Attempt 1 result: k6nl
+2025-02-26 15:49:27 - captcha_service - INFO - Successfully recognized CAPTCHA: k6nl
+2025-02-26 16:20:09 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 16:20:09 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 16:20:09 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 16:20:09 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 16:20:09 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 16:20:09 - captcha_service - DEBUG - Valid result found with PSM mode 7: zes3
+2025-02-26 16:20:09 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_162009_attempt_1
+2025-02-26 16:20:09 - captcha_service - INFO - Attempt 1 result: zes3
+2025-02-26 16:20:09 - captcha_service - INFO - Successfully recognized CAPTCHA: zes3
+2025-02-26 16:20:11 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 16:20:11 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 16:20:11 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 16:20:11 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 16:20:11 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 16:20:11 - captcha_service - DEBUG - Valid result found with PSM mode 7: srnw
+2025-02-26 16:20:11 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_162011_attempt_1
+2025-02-26 16:20:11 - captcha_service - INFO - Attempt 1 result: srnw
+2025-02-26 16:20:11 - captcha_service - INFO - Successfully recognized CAPTCHA: srnw
+2025-02-26 16:20:12 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 16:20:12 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 16:20:12 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 16:20:12 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 16:20:12 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 16:20:13 - captcha_service - DEBUG - Valid result found with PSM mode 7: rqoe
+2025-02-26 16:20:13 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_162013_attempt_1
+2025-02-26 16:20:13 - captcha_service - INFO - Attempt 1 result: rqoe
+2025-02-26 16:20:13 - captcha_service - INFO - Successfully recognized CAPTCHA: rqoe
+2025-02-26 16:29:47 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 16:29:47 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 16:29:47 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 16:29:47 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 16:29:47 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 16:29:47 - captcha_service - DEBUG - Valid result found with PSM mode 7: ujjg
+2025-02-26 16:29:47 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_162947_attempt_1
+2025-02-26 16:29:47 - captcha_service - INFO - Attempt 1 result: ujjg
+2025-02-26 16:29:47 - captcha_service - INFO - Successfully recognized CAPTCHA: ujjg
+2025-02-26 16:39:08 - captcha_service - INFO - Starting CAPTCHA processing
+2025-02-26 16:39:08 - captcha_service - DEBUG - Retrieved CAPTCHA source
+2025-02-26 16:39:08 - captcha_service - DEBUG - Processing screenshot
+2025-02-26 16:39:08 - captcha_service - DEBUG - Taking screenshot of CAPTCHA element
+2025-02-26 16:39:08 - captcha_service - DEBUG - Screenshot processed. Size: (80, 40)
+2025-02-26 16:39:09 - captcha_service - DEBUG - Valid result found with PSM mode 7: jl2p
+2025-02-26 16:39:09 - captcha_service - INFO - Attempt 1 saved to: captcha_attempts/20250226_163909_attempt_1
+2025-02-26 16:39:09 - captcha_service - INFO - Attempt 1 result: jl2p
+2025-02-26 16:39:09 - captcha_service - INFO - Successfully recognized CAPTCHA: jl2p
