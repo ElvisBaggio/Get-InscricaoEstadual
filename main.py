@@ -6,6 +6,7 @@ import asyncio
 
 from routes.ie_routes import router as ie_router
 from utils.logger import app_logger
+from utils.config import settings
 
 app = FastAPI(
     title="CADESP IE API",
@@ -42,10 +43,10 @@ async def log_requests(request: Request, call_next):
 app_logger.debug("Configuring CORS middleware")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_origins=[settings.CORS_ALLOW_ORIGINS],
+    allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
+    allow_methods=[settings.CORS_ALLOW_METHODS],
+    allow_headers=[settings.CORS_ALLOW_HEADERS],
 )
 
 # Include routes
@@ -63,4 +64,4 @@ async def root():
 
 if __name__ == "__main__":
     app_logger.info("Starting Uvicorn server")
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host=settings.API_HOST, port=settings.API_PORT, reload=True)

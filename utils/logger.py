@@ -2,14 +2,11 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
+from utils.config import settings
 
 # Create logs directory if it doesn't exist
 logs_dir = Path("logs")
 logs_dir.mkdir(exist_ok=True)
-
-# Common log format
-LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 def setup_logger(name: str, log_file: str, level=logging.INFO) -> logging.Logger:
     """
@@ -34,12 +31,12 @@ def setup_logger(name: str, log_file: str, level=logging.INFO) -> logging.Logger
             maxBytes=10*1024*1024,  # 10MB
             backupCount=5
         )
-        file_handler.setFormatter(logging.Formatter(LOG_FORMAT, DATETIME_FORMAT))
+        file_handler.setFormatter(logging.Formatter(settings.LOG_FORMAT, settings.DATETIME_FORMAT))
         logger.addHandler(file_handler)
         
         # Console handler
         console_handler = logging.StreamHandler()
-        console_handler.setFormatter(logging.Formatter(LOG_FORMAT, DATETIME_FORMAT))
+        console_handler.setFormatter(logging.Formatter(settings.LOG_FORMAT, settings.DATETIME_FORMAT))
         logger.addHandler(console_handler)
     
     return logger

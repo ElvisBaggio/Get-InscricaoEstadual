@@ -19,7 +19,8 @@ class SeleniumService:
         try:
             selenium_logger.info("Initializing Chrome WebDriver")
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--headless')
+            if settings.SELENIUM_CHROME_HEADLESS:
+                chrome_options.add_argument('--headless')
             selenium_logger.debug("Chrome options configured: headless mode enabled")
             
             if settings.CHROME_DRIVER_PATH:
@@ -29,7 +30,7 @@ class SeleniumService:
                 selenium_logger.debug("Using default ChromeDriver path")
                 self.driver = webdriver.Chrome(options=chrome_options)
 
-            self.wait = WebDriverWait(self.driver, 2)  # Reduced timeout for faster response
+            self.wait = WebDriverWait(self.driver, settings.SELENIUM_DEFAULT_WAIT_TIMEOUT)
             selenium_logger.info("ChromeDriver initialized successfully")
         except Exception as e:
             selenium_logger.error(f"Failed to initialize ChromeDriver: {str(e)}", exc_info=True)
@@ -98,8 +99,8 @@ class SeleniumService:
                 }
 
             # Process CAPTCHA with stability check and retries
-            max_captcha_attempts = 2  # Reduced attempts
-            retry_delay = 0.1  # Reduced delay
+            max_captcha_attempts = settings.SELENIUM_MAX_CAPTCHA_ATTEMPTS
+            retry_delay = settings.SELENIUM_RETRY_DELAY
 
             for captcha_attempt in range(max_captcha_attempts):
                 selenium_logger.debug(f"Processing CAPTCHA (attempt {captcha_attempt + 1}/{max_captcha_attempts})")
@@ -109,7 +110,7 @@ class SeleniumService:
                     
                     # Get initial src to check for changes
                     initial_src = captcha_img.get_attribute("src")
-                    time.sleep(0.1)  # Minimal wait to ensure CAPTCHA is stable
+                    time.sleep(settings.SELENIUM_CAPTCHA_STABILITY_WAIT)  # Wait to ensure CAPTCHA is stable
                     
                     # Verify CAPTCHA hasn't changed
                     current_src = captcha_img.get_attribute("src")
@@ -145,8 +146,8 @@ class SeleniumService:
                 }
 
             # Try form submission with retries
-            max_retries = 2  # Reduced retries
-            retry_delay = 0.1  # Reduced delay
+            max_retries = settings.SELENIUM_MAX_FORM_RETRIES
+            retry_delay = settings.SELENIUM_FORM_RETRY_DELAY
 
             for attempt in range(max_retries):
                 try:
@@ -159,7 +160,7 @@ class SeleniumService:
                     self.driver.execute_script("arguments[0].click();", search_button)
                     
                     # Create a shorter timeout wait for error checks
-                    quick_wait = WebDriverWait(self.driver, 1)
+                    quick_wait = WebDriverWait(self.driver, settings.SELENIUM_QUICK_WAIT_TIMEOUT)
                     
                     try:
                         # Try to find any of the possible elements
@@ -184,7 +185,7 @@ class SeleniumService:
                                         captcha_input.clear()
                                         captcha_input.send_keys(captcha_text)
                                         selenium_logger.debug("Entered new CAPTCHA text for retry.")
-                                        time.sleep(0.1)  # Brief wait before retry
+                                        time.sleep(settings.SELENIUM_CAPTCHA_STABILITY_WAIT)  # Brief wait before retry
                                         continue
                                     except TimeoutException as e:
                                         selenium_logger.error("CAPTCHA interaction failed during retry.", exc_info=True)
@@ -208,21 +209,21 @@ class SeleniumService:
                         if attempt == max_retries - 1:
                             raise Exception("No response received after form submission")
                         selenium_logger.warning("No response after form submission, retrying...")
-                        time.sleep(0.1)
+                        time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
                         continue
                 except Exception as e:
                     if attempt == max_retries - 1:
                         selenium_logger.error(f"Form submission failed after {max_retries} attempts: {str(e)}", exc_info=True)
                         raise Exception(f"Form submission failed after {max_retries} attempts: {str(e)}")
                     selenium_logger.warning(f"Form submission attempt {attempt + 1} failed: {str(e)}. Retrying...")
-                    time.sleep(0.1)
+                    time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
                     continue
 
             # Wait for and validate result page
             try:
                 selenium_logger.debug("Waiting for result table and data")
                 # Wait for main result table with retry
-                for retry in range(2):  # Reduced retries
+                for retry in range(settings.SELENIUM_RESULT_RETRIES):
                     try:
                         # Wait for main result table
                         result_table = self.wait.until(EC.presence_of_element_located(
@@ -230,28 +231,28 @@ class SeleniumService:
                         
                         # Verify all sections are present
                         sections = self.driver.find_elements(By.XPATH, settings.RESULT_SECTIONS_XPATH)
-                        if len(sections) < 3:  # Should have at least Estabelecimento, Endereço, and Informações Complementares
-                            if retry < 1:
+                        if len(sections) < settings.SELENIUM_MIN_RESULT_SECTIONS:
+                            if retry < settings.SELENIUM_RESULT_RETRIES - 1:
                                 selenium_logger.warning("Result sections not fully loaded, retrying...")
-                                time.sleep(0.1)
+                                time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
                                 continue
                             raise Exception("Result page sections not fully loaded")
                         
                         # Verify table has content
                         if not result_table.text.strip():
-                            if retry < 1:
+                            if retry < settings.SELENIUM_RESULT_RETRIES - 1:
                                 selenium_logger.warning("Result table is empty, retrying...")
-                                time.sleep(0.1)
+                                time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
                                 continue
                             raise Exception("Result table is empty")
                             
                         break  # If we got here, everything is loaded
                         
                     except TimeoutException as e:
-                        if retry == 1:
+                        if retry == settings.SELENIUM_RESULT_RETRIES - 1:
                             raise
-                        selenium_logger.warning(f"Timeout waiting for result table (attempt {retry + 1}/2)")
-                        time.sleep(0.1)
+                        selenium_logger.warning(f"Timeout waiting for result table (attempt {retry + 1}/{settings.SELENIUM_RESULT_RETRIES})")
+                        time.sleep(settings.SELENIUM_FORM_RETRY_DELAY)
                 
                 # Extract IE number
                 ie_number = self._get_field_value('IE:')

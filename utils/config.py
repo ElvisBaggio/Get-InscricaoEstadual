@@ -5,8 +5,37 @@ from typing import Optional
 @dataclass
 class Settings:
     TESSERACT_CMD: Optional[str] = None
-    CADESP_URL: str = "https://www.cadesp.fazenda.sp.gov.br/(S(s0l453pgvcpvtglc3avqciub))/Pages/Cadastro/Consultas/ConsultaPublica/ConsultaPublica.aspx"
+    CADESP_URL: str = os.getenv('CADESP_URL', "https://www.cadesp.fazenda.sp.gov.br/(S(xxx))/Pages/Cadastro/Consultas/ConsultaPublica/ConsultaPublica.aspx")
     CHROME_DRIVER_PATH: Optional[str] = None
+
+    # API Settings
+    API_HOST: str = os.getenv('API_HOST', '0.0.0.0')
+    API_PORT: int = int(os.getenv('API_PORT', '8000'))
+    CORS_ALLOW_ORIGINS: str = os.getenv('CORS_ALLOW_ORIGINS', '*')
+    CORS_ALLOW_CREDENTIALS: bool = os.getenv('CORS_ALLOW_CREDENTIALS', 'true').lower() == 'true'
+    CORS_ALLOW_METHODS: str = os.getenv('CORS_ALLOW_METHODS', '*')
+    CORS_ALLOW_HEADERS: str = os.getenv('CORS_ALLOW_HEADERS', '*')
+
+    # Logging Settings
+    LOG_FORMAT: str = os.getenv('LOG_FORMAT', '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    DATETIME_FORMAT: str = os.getenv('DATETIME_FORMAT', '%Y-%m-%d %H:%M:%S')
+
+    # Selenium Settings
+    # Wait Timeouts
+    SELENIUM_DEFAULT_WAIT_TIMEOUT: int = int(os.getenv('SELENIUM_DEFAULT_WAIT_TIMEOUT', '2'))
+    SELENIUM_QUICK_WAIT_TIMEOUT: int = int(os.getenv('SELENIUM_QUICK_WAIT_TIMEOUT', '1'))
+    SELENIUM_CAPTCHA_STABILITY_WAIT: float = float(os.getenv('SELENIUM_CAPTCHA_STABILITY_WAIT', '0.1'))
+    SELENIUM_RETRY_DELAY: float = float(os.getenv('SELENIUM_RETRY_DELAY', '0.2'))
+    SELENIUM_FORM_RETRY_DELAY: float = float(os.getenv('SELENIUM_FORM_RETRY_DELAY', '0.1'))
+
+    # Retry Attempts
+    SELENIUM_MAX_CAPTCHA_ATTEMPTS: int = int(os.getenv('SELENIUM_MAX_CAPTCHA_ATTEMPTS', '3'))
+    SELENIUM_MAX_FORM_RETRIES: int = int(os.getenv('SELENIUM_MAX_FORM_RETRIES', '2'))
+    SELENIUM_RESULT_RETRIES: int = int(os.getenv('SELENIUM_RESULT_RETRIES', '2'))
+    SELENIUM_MIN_RESULT_SECTIONS: int = int(os.getenv('SELENIUM_MIN_RESULT_SECTIONS', '3'))
+
+    # Browser Settings
+    SELENIUM_CHROME_HEADLESS: bool = os.getenv('SELENIUM_CHROME_HEADLESS', 'true').lower() == 'true'
 
     # Captcha recognition settings with optimized values from calibration
     CAPTCHA_PSM_MODE: int = 7  # Single line of text
