@@ -5,8 +5,10 @@ import time
 import asyncio
 
 from routes.ie_routes import router as ie_router
+from routes.cache_routes import router as cache_router
 from utils.logger import app_logger
 from utils.config import settings
+from utils.database import init_db
 
 app = FastAPI(
     title="CADESP IE API",
@@ -19,6 +21,10 @@ async def startup_event():
     app_logger.info("Starting CADESP IE API")
     app_logger.info("Initializing FastAPI application")
     app.state.loop = asyncio.get_running_loop()
+    
+    # Initialize database
+    app_logger.info("Initializing database")
+    init_db()
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -52,6 +58,7 @@ app.add_middleware(
 # Include routes
 app_logger.debug("Including API routes")
 app.include_router(ie_router)
+app.include_router(cache_router)
 
 @app.get("/")
 async def root():

@@ -173,18 +173,37 @@ class SeleniumService:
                     # Use JavaScript to click to avoid potential overlay issues
                     self.driver.execute_script("arguments[0].click();", search_button)
                     
-                    # Create a shorter timeout wait for error checks
-                    quick_wait = WebDriverWait(self.driver, settings.SELENIUM_QUICK_WAIT_TIMEOUT)
+                    # Use default timeout for better reliability
+                    quick_wait = WebDriverWait(self.driver, settings.SELENIUM_DEFAULT_WAIT_TIMEOUT)
                     
                     try:
-                        # Try to find any of the possible elements
-                        result = quick_wait.until(lambda driver: (
-                            driver.find_element(By.XPATH, settings.RESULT_TABLE_XPATH) or
-                            driver.find_element(By.ID, settings.ERROR_MSG_ID) or
-                            driver.find_element(By.ID, settings.NOT_FOUND_MSG_ID)
-                        ))
+                        # Wait for page to be ready after form submission
+                        quick_wait.until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
                         
-                        # Check which element we found
+                        # Check for loading indicator if present
+                        loading_indicators = self.driver.find_elements(By.ID, settings.LOADING_INDICATOR_ID)
+                        if loading_indicators:
+                            quick_wait.until_not(EC.presence_of_element_located((By.ID, settings.LOADING_INDICATOR_ID)))
+                        
+                        # Check each possible element
+                        result = None
+                        for selector in [
+                            (By.XPATH, settings.RESULT_TABLE_XPATH),
+                            (By.ID, settings.ERROR_MSG_ID),
+                            (By.ID, settings.NOT_FOUND_MSG_ID)
+                        ]:
+                            try:
+                                element = quick_wait.until(EC.presence_of_element_located(selector))
+                                if element.is_displayed():
+                                    result = element
+                                    break
+                            except TimeoutException:
+                                continue
+                        
+                        if result is None:
+                            raise TimeoutException("No result elements found")
+                        
+                        # Check which element we found (now using result from above)
                         if result.get_attribute('id') == settings.ERROR_MSG_ID:
                             error_msg = result
                             if error_msg.is_displayed() and error_msg.text.strip():
@@ -222,7 +241,8 @@ class SeleniumService:
                     except TimeoutException:
                         if attempt == max_retries - 1:
                             raise Exception("No response received after form submission")
-                        selenium_logger.warning(f"No response after form submission, retrying in {retry_delay:.2f}s...")
+                        selenium_logger.warning(f"No response after form submission, refreshing page and retrying in {retry_delay:.2f}s...")
+                        self.driver.refresh()
                         time.sleep(retry_delay)
                         continue
                 except Exception as e:

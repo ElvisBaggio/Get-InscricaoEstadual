@@ -22,8 +22,8 @@ class Settings:
 
     # Selenium Settings
     # Wait Timeouts
-    SELENIUM_DEFAULT_WAIT_TIMEOUT: int = int(os.getenv('SELENIUM_DEFAULT_WAIT_TIMEOUT', '2'))
-    SELENIUM_QUICK_WAIT_TIMEOUT: int = int(os.getenv('SELENIUM_QUICK_WAIT_TIMEOUT', '1'))
+    SELENIUM_DEFAULT_WAIT_TIMEOUT: int = int(os.getenv('SELENIUM_DEFAULT_WAIT_TIMEOUT', '10'))
+    SELENIUM_QUICK_WAIT_TIMEOUT: int = int(os.getenv('SELENIUM_QUICK_WAIT_TIMEOUT', '5'))
     SELENIUM_CAPTCHA_STABILITY_WAIT: float = float(os.getenv('SELENIUM_CAPTCHA_STABILITY_WAIT', '0.1'))
     SELENIUM_RETRY_DELAY: float = float(os.getenv('SELENIUM_RETRY_DELAY', '0.2'))
     SELENIUM_FORM_RETRY_DELAY: float = float(os.getenv('SELENIUM_FORM_RETRY_DELAY', '0.1'))
@@ -73,6 +73,7 @@ class Settings:
     # Error handling
     ERROR_MSG_ID: str = "ctl00_conteudoPaginaPlaceHolder_filtroTabContainer_filtroEmitirCertidaoTabPanel_MensagemErroFiltroLabel"
     NOT_FOUND_MSG_ID: str = "ctl00_conteudoPaginaPlaceHolder_filtroTabContainer_filtroEmitirCertidaoTabPanel_MensagemNadaEncontradoLabel"
+    LOADING_INDICATOR_ID: str = "ctl00_conteudoPaginaPlaceHolder_updateProgressPanel"
     
     # IE number validation pattern
     IE_NUMBER_PATTERN: str = r"^\d{3}\.\d{3}\.\d{3}\.\d{3}$"
