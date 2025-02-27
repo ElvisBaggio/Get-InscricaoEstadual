@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -25,10 +26,12 @@ class SeleniumService:
             
             if settings.CHROME_DRIVER_PATH:
                 selenium_logger.debug(f"Using custom ChromeDriver path: {settings.CHROME_DRIVER_PATH}")
-                self.driver = webdriver.Chrome(executable_path=settings.CHROME_DRIVER_PATH, options=chrome_options)
+                service = Service(executable_path=settings.CHROME_DRIVER_PATH)
             else:
                 selenium_logger.debug("Using default ChromeDriver path")
-                self.driver = webdriver.Chrome(options=chrome_options)
+                service = Service()
+            
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
 
             self.wait = WebDriverWait(self.driver, settings.SELENIUM_DEFAULT_WAIT_TIMEOUT)
             selenium_logger.info("ChromeDriver initialized successfully")
