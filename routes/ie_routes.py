@@ -1,5 +1,5 @@
-from typing import Dict, Union
-from fastapi import APIRouter, HTTPException, Request, Depends
+from typing import Dict, Union, Tuple
+from fastapi import APIRouter, HTTPException, Request, Depends, Response
 import re
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -15,12 +15,29 @@ from utils.config import settings
 router = APIRouter()
 thread_pool = ThreadPoolExecutor(max_workers=4)  # Limit concurrent browser sessions
 
+def get_error_details(result: dict) -> Tuple[int, str, str]:
+    """Get appropriate status code and error type based on the error."""
+    error_message = result.get("error", "Unknown error")
+    
+    if result.get("not_found", False):
+        return 404, "not_found", error_message
+    if result.get("validation_error", False):
+        return 422, "validation_error", error_message
+    if "CAPTCHA" in error_message:
+        return 417, "captcha_error", error_message
+    if "webpage structure" in error_message:
+        return 503, "service_unavailable", error_message
+    if error_message.startswith("WebDriver"):
+        return 503, "service_unavailable", error_message
+    return 500, "internal_error", error_message
+
 def validate_cnpj(cnpj: str, request_id: str = None) -> str:
     """
     Validate CNPJ format and return cleaned version.
     
     Args:
         cnpj: Raw CNPJ number
+        request_id: Optional request ID for logging
         
     Returns:
         str: Cleaned CNPJ (only digits)
@@ -37,7 +54,12 @@ def validate_cnpj(cnpj: str, request_id: str = None) -> str:
         api_logger.error(f"Invalid CNPJ format [{request_id}]: {cnpj}")
         raise HTTPException(
             status_code=400,
-            detail="CNPJ must contain exactly 14 digits"
+            detail={
+                "status": "error",
+                "error_type": "validation_error",
+                "detail": "CNPJ must contain exactly 14 digits",
+                "request_id": request_id
+            }
         )
     
     api_logger.debug(f"CNPJ validation successful [{request_id}]: {cleaned_cnpj}")
@@ -56,6 +78,7 @@ def is_cache_valid(last_updated: datetime) -> bool:
 async def get_ie(
     cnpj: str,
     request: Request,
+    response: Response,
     db: Session = Depends(get_db)
 ) -> Dict[str, Union[bool, str, None]]:
     """
@@ -91,7 +114,9 @@ async def get_ie(
                 f"IE: {cache_entry.ie_number}, Times requested: {cache_entry.request_count}"
             )
             
+            response.status_code = 200  # OK
             return {
+                "status": "success",
                 "ie_number": cache_entry.ie_number,
                 "request_id": request_id,
                 "processing_time": "0.00s",
@@ -161,16 +186,21 @@ async def get_ie(
         # Handle errors and not found cases
         if not success:
             error_message = result.get("error", "Unknown error")
-            status_code = 404 if result.get("not_found", False) else 500
+            status_code, error_type, error_detail = get_error_details(result)
             
-            api_logger.error(
+            api_logger.warning(
                 f"IE lookup failed [{request_id}] - CNPJ: {cnpj}, "
-                f"Error: {error_message}, Time: {elapsed_time:.2f}s"
+                f"Error Type: {error_type}, Error: {error_detail}, Time: {elapsed_time:.2f}s"
             )
-            raise HTTPException(
-                status_code=status_code,
-                detail=error_message
-            )
+            
+            response.status_code = status_code
+            return {
+                "status": "error",
+                "error_type": error_type,
+                "detail": error_detail,
+                "request_id": request_id,
+                "processing_time": f"{elapsed_time:.2f}s"
+            }
             
         # Log successful lookup
         ie_number = result.get("ie_number")
@@ -179,7 +209,9 @@ async def get_ie(
             f"IE: {ie_number}, Time: {elapsed_time:.2f}s"
         )
         
+        response.status_code = 200
         return {
+            "status": "success",
             "ie_number": ie_number,
             "request_id": request_id,
             "processing_time": f"{elapsed_time:.2f}s",
@@ -193,7 +225,10 @@ async def get_ie(
             f"Unexpected error in IE lookup [{request_id}] - CNPJ: {cnpj}, "
             f"Error: {str(e)}", exc_info=True
         )
-        raise HTTPException(
-            status_code=500,
-            detail=f"Internal server error: {str(e)}"
-        )
+        return {
+            "status": "error",
+            "error_type": "internal_error",
+            "detail": str(e),
+            "request_id": request_id,
+            "processing_time": f"{time.time() - start_time:.2f}s"
+        }

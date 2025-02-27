@@ -221,9 +221,23 @@ class SeleniumService:
                                         time.sleep(settings.SELENIUM_CAPTCHA_STABILITY_WAIT)  # Brief wait before retry
                                         continue
                                     except TimeoutException as e:
-                                        selenium_logger.error("CAPTCHA interaction failed during retry.", exc_info=True)
-                                        raise Exception("CAPTCHA interaction failed during retry.") from e
-                                raise Exception(f"Form validation error: {error_msg.text}")
+                                        selenium_logger.warning("CAPTCHA interaction failed during retry.")
+                                        return {
+                                            "success": False,
+                                            "error": "CAPTCHA interaction failed during retry",
+                                            "cnpj": cnpj,
+                                            "elapsed_time": f"{time.time() - start_time:.2f}s",
+                                            "validation_error": True
+                                        }
+                                # Return form validation error instead of raising exception
+                                selenium_logger.warning(f"Form validation error: {error_msg.text}")
+                                return {
+                                    "success": False,
+                                    "error": error_msg.text,
+                                    "cnpj": cnpj,
+                                    "elapsed_time": f"{time.time() - start_time:.2f}s",
+                                    "validation_error": True
+                                }
                         elif result.get_attribute('id') == settings.NOT_FOUND_MSG_ID:
                             not_found_msg = result
                             if not_found_msg.is_displayed() and not_found_msg.text.strip():
@@ -240,15 +254,28 @@ class SeleniumService:
                         break
                     except TimeoutException:
                         if attempt == max_retries - 1:
-                            raise Exception("No response received after form submission")
+                            selenium_logger.warning("No response received after form submission")
+                            return {
+                                "success": False,
+                                "error": "No response received after form submission",
+                                "cnpj": cnpj,
+                                "elapsed_time": f"{time.time() - start_time:.2f}s",
+                                "validation_error": True
+                            }
                         selenium_logger.warning(f"No response after form submission, refreshing page and retrying in {retry_delay:.2f}s...")
                         self.driver.refresh()
                         time.sleep(retry_delay)
                         continue
                 except Exception as e:
                     if attempt == max_retries - 1:
-                        selenium_logger.error(f"Form submission failed after {max_retries} attempts: {str(e)}", exc_info=True)
-                        raise Exception(f"Form submission failed after {max_retries} attempts: {str(e)}")
+                        selenium_logger.warning(f"Form submission failed after {max_retries} attempts: {str(e)}")
+                        return {
+                            "success": False,
+                            "error": f"Form submission failed after {max_retries} attempts: {str(e)}",
+                            "cnpj": cnpj,
+                            "elapsed_time": f"{time.time() - start_time:.2f}s",
+                            "validation_error": True
+                        }
                     selenium_logger.warning(f"Form submission attempt {attempt + 1} failed: {str(e)}. Retrying in {retry_delay:.2f}s...")
                     time.sleep(retry_delay)
                     continue
@@ -274,7 +301,14 @@ class SeleniumService:
                                 selenium_logger.warning(f"Result sections not fully loaded, retrying in {result_retry_delay:.2f}s...")
                                 time.sleep(result_retry_delay)
                                 continue
-                            raise Exception("Result page sections not fully loaded")
+                            selenium_logger.warning("Result page sections not fully loaded")
+                            return {
+                                "success": False,
+                                "error": "Result page sections not fully loaded",
+                                "cnpj": cnpj,
+                                "elapsed_time": f"{time.time() - start_time:.2f}s",
+                                "validation_error": True
+                            }
                         
                         # Verify table has content
                         if not result_table.text.strip():
@@ -282,7 +316,14 @@ class SeleniumService:
                                 selenium_logger.warning(f"Result table is empty, retrying in {result_retry_delay:.2f}s...")
                                 time.sleep(result_retry_delay)
                                 continue
-                            raise Exception("Result table is empty")
+                            selenium_logger.warning("Result table is empty")
+                            return {
+                                "success": False,
+                                "error": "Result table is empty",
+                                "cnpj": cnpj,
+                                "elapsed_time": f"{time.time() - start_time:.2f}s",
+                                "validation_error": True
+                            }
                             
                         break  # If we got here, everything is loaded
                         
@@ -313,8 +354,14 @@ class SeleniumService:
                     "elapsed_time": f"{elapsed_time:.2f}s"
                 }
             except TimeoutException:
-                selenium_logger.error("Could not load result table. The CNPJ might be invalid or the page structure changed.", exc_info=True)
-                raise Exception("Could not load result page. The CNPJ might be invalid or the page structure changed.")
+                selenium_logger.warning("Could not load result table. The CNPJ might be invalid or the page structure changed.")
+                return {
+                    "success": False,
+                    "error": "Could not load result page. The CNPJ might be invalid or the page structure changed.",
+                    "cnpj": cnpj,
+                    "elapsed_time": f"{time.time() - start_time:.2f}s",
+                    "validation_error": True
+                }
 
         except WebDriverException as e:
             selenium_logger.error(f"WebDriver error for CNPJ {cnpj}: {str(e)}", exc_info=True)
