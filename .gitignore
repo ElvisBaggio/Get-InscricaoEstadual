@@ -20,3 +20,4 @@ htmlcov/
 .nox/
 .mypy_cache/
 ie_lookups.db
+ie_lookups.db
