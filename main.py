@@ -6,6 +6,7 @@ import asyncio
 
 from routes.ie_routes import router as ie_router
 from routes.cache_routes import router as cache_router
+from routes.health import router as health_router
 from utils.logger import app_logger
 from utils.config import settings
 from utils.database import init_db
@@ -59,6 +60,7 @@ app.add_middleware(
 app_logger.debug("Including API routes")
 app.include_router(ie_router)
 app.include_router(cache_router)
+app.include_router(health_router)
 
 @app.get("/")
 async def root():
