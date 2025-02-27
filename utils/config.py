@@ -46,7 +46,7 @@ class Settings:
     CAPTCHA_RESIZE_SMALL_IMAGES: bool = True
     
     # Captcha attempt logging settings
-    CAPTCHA_SAVE_ATTEMPTS: bool = True
+    CAPTCHA_SAVE_ATTEMPTS: bool = False
     CAPTCHA_ATTEMPTS_DIR: str = "captcha_attempts"
     
     # Selenium element IDs
