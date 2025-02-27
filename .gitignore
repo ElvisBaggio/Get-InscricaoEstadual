@@ -19,3 +19,4 @@ htmlcov/
 .tox/
 .nox/
 .mypy_cache/
+ie_lookups.db
