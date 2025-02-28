@@ -32,19 +32,7 @@ def get_error_details(result: dict) -> Tuple[int, str, str]:
     return 500, "internal_error", error_message
 
 def validate_cnpj(cnpj: str, request_id: str = None) -> str:
-    """
-    Validate CNPJ format and return cleaned version.
-    
-    Args:
-        cnpj: Raw CNPJ number
-        request_id: Optional request ID for logging
-        
-    Returns:
-        str: Cleaned CNPJ (only digits)
-        
-    Raises:
-        HTTPException: If CNPJ format is invalid
-    """
+    """Validate CNPJ format and return cleaned version."""
     api_logger.debug(f"Validating CNPJ format [{request_id}]: {cnpj}")
     # Remove any non-digit characters
     cleaned_cnpj = re.sub(r'\D', '', cnpj)
@@ -58,6 +46,19 @@ def validate_cnpj(cnpj: str, request_id: str = None) -> str:
                 "status": "error",
                 "error_type": "validation_error",
                 "detail": "CNPJ must contain exactly 14 digits",
+                "request_id": request_id
+            }
+        )
+    
+    # Check for obviously invalid CNPJs
+    if cleaned_cnpj == '00000000000000' or len(set(cleaned_cnpj)) == 1:
+        api_logger.error(f"Invalid CNPJ value [{request_id}]: {cnpj}")
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "status": "error",
+                "error_type": "validation_error",
+                "detail": "Invalid CNPJ value. CNPJ cannot be all zeros or all identical digits.",
                 "request_id": request_id
             }
         )

@@ -283,6 +283,23 @@ class SeleniumService:
                     time.sleep(retry_delay)
                     continue
 
+            # Try to handle any alert that might appear
+            try:
+                alert = WebDriverWait(self.driver, 3).until(EC.alert_is_present())
+                alert_text = alert.text
+                selenium_logger.warning(f"Alert detected: {alert_text}")
+                alert.accept()
+                return {
+                    "success": False,
+                    "error": f"Form validation error: {alert_text}",
+                    "cnpj": cnpj,
+                    "elapsed_time": f"{time.time() - start_time:.2f}s",
+                    "validation_error": True
+                }
+            except TimeoutException:
+                # No alert, continue normally
+                pass
+
             # Wait for and validate result page
             try:
                 selenium_logger.debug("Waiting for result table and data")
